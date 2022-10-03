@@ -1,0 +1,64 @@
+{% extends "trades/base.html" %}
+{% block page_style %}
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+<!-- Table styling from https://www.w3schools.com/html/html_tables.asp -->
+<style>
+    * {
+        font-family: 'Roboto';
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+</style>
+{% endblock page_style %}
+{% block content %}
+<h1>Trades on {{day}}/{{month}}/{{year}}</h1>
+{% if reports %}
+    <table>
+        <tr>
+            <th>Date of Trade</th>
+            <th>Trade ID</th>
+            <th>Product Name</th>
+            <th>Buying Party</th>
+            <th>Selling Party</th>
+            <th>Notional Amount</th>
+            <th>Quantity</th>
+            <th>Maturity Date</th>
+            <th>Underlying Price</th>
+            <th>Strike Price</th>
+        </tr>
+        {% for report in reports %}
+        <tr>
+            <td>{{ report.date_of_trade }}</td>
+            <td>{{ report.trade_id }}</td>
+            {% if report.product_type == "S" %}
+                <td>Stocks</td>
+            {% else %}
+                <td>{{ report.traded_product.product }}</td>
+            {% endif %}
+            <td>{{ report.buying_party }}</td>
+            <td>{{ report.selling_party }}</td>
+            <td>{{ report.notional_currency }} {{ report.notional_amount }}</td>
+            <td>{{ report.quantity }}</td>
+            <td>{{ report.maturity_date }}</td>
+            <td>{{ report.underlying_currency }} {{ report.underlying_price }}</td>
+            <td>{{ report.underlying_currency }} {{ report.strike_price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No trades found on this day.</p>
+{% endif %}
+
+{% endblock content %}
